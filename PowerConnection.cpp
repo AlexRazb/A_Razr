@@ -4,6 +4,14 @@
 #include <QApplication>
 
 
+#ifdef Q_OS_LINUX
+#define COM_DISCRIPTION "FT232R USB UART"
+#elif defined(Q_OS_WIN32)
+#define COM_DISCRIPTION "USB Serial Port"
+//#else
+//#error "We don't support that version yet..."
+#endif
+
 using namespace std;
 
 PowerConnection::PowerConnection(QObject *parent) : QSerialPort(parent)
@@ -153,7 +161,7 @@ bool PowerConnection::Connect()
     foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts())
     {
        //задать имя для подключения
-        if (info.description() == "USB Serial Port")//Только если виртуальный юсб-ком порт
+        if (info.description() == (COM_DISCRIPTION))//Только если виртуальный юсб-ком порт
         {
             m_CommPort = info.portName();
             PowerConnection::setPortName(m_CommPort);//name
